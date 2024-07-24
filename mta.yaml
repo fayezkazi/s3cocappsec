@@ -1,0 +1,59 @@
+_schema-version: '3.1'
+ID: s3cocapp
+version: 1.0.0
+description: ''
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: s3cocapp-srv
+    type: nodejs
+    path: /
+    parameters:
+      buildpack: nodejs_buildpack
+      readiness-health-check-type: http
+      readiness-health-check-http-endpoint: /health
+      memory: 512M
+      disk-quota: 1024M
+    build-parameters:
+      builder: npm
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: '${default-url}'
+    requires:
+      - name: s3cocapp-auth
+  - name: s3cocapp-ui
+    type: nodejs
+    path: app
+    parameters:
+      buildpack: nodejs_buildpack
+      readiness-health-check-type: http
+      readiness-health-check-http-endpoint: /health
+      disk-quota: 1024M
+      memory: 512M
+    build-parameters:
+      builder: npm
+    requires:
+      - name: s3cocapp-auth
+      - name: srv-api
+        group: destinations
+        properties:
+          strictSSL: true
+          forwardAuthToken: true
+          url: '~{srv-url}'
+resources:
+  - name: s3cocapp-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: 's3cocapp-${org}-${space}'
+        tenant-mode: dedicated

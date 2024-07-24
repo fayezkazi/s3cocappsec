@@ -1,0 +1,19 @@
+{
+    "welcomeFile": "s3cocapp/webapp/",
+    "authenticationMethod": "route",
+    "sessionTimeout": 100,
+    "pluginMetadataEndpoint": "/metadata",
+    "routes": [
+      {
+        "source": "^/s3cocapp/webapp/(.*)",
+        "target": "$1",
+        "localDir": "s3cocapp/webapp/",
+        "authenticationType": "xsuaa"
+      },
+      {
+        "source": "^/(.*)$",
+        "destination": "srv-api",
+        "authenticationType": "xsuaa"
+      }
+    ]
+  }

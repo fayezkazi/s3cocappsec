@@ -1,0 +1,23 @@
+<mvc:View xmlns:cards="sap.f.cards" controllerName="coc.demo.s3cocapp.controller.Main"
+    xmlns:l="sap.ui.layout"
+    xmlns:u="sap.ui.unified"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+    <content>
+        <HBox id="_IDGenHBox1" alignItems="Start" justifyContent="Center" class="sapUiLargeMarginTop">
+                <l:VerticalLayout id="_IDGenVerticalLayout1">
+                    <u:FileUploader
+                        id="fileUploader"
+                        name="file"
+                        sendXHR="false"
+                        useMultipart="true" 
+                        uploadUrl="/upload"
+                        tooltip="Upload your file to the local server"
+                        uploadComplete="handleUploadComplete"/>
+                    <Button id="_IDGenButton1" text="Upload File" press="handleUploadPress"/>
+                </l:VerticalLayout>
+            </HBox>
+        </content>
+    </Page>
+</mvc:View>
