@@ -40,11 +40,15 @@ const upload = multer({
 // app.use(express.static('app/s3cocapp/webapp'));
 
 app.post("/upload", upload.single("file"), async (req, res) => {
-    const result = await s3upload2(req.file);
-    // res.setHeader("Content-Type", "application/json");
-    // res.status(200);
-    return res.send('200'); //.send("File Upload successful");
     console.log("File Upload Started");
+    try {
+        await s3upload2(req.file);
+        res.status(200).send('200');
+    } catch (error) {
+        res.status(200).send('Something wrong with AWS server');
+    }
+    // const result = await s3upload2(req.file);
+    // res.status(200).send('200'); //.send("File Upload successful");
 });
 
 app.get("/list", async (req, res) => {

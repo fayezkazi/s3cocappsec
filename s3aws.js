@@ -12,7 +12,7 @@ exports.s3upload2 = async (file) => {
 
     const param = {
         Bucket : process.env.BUCKET_NAME,
-        Key : `ValidationDocs/${file.originalname}`,
+        Key : `Files-to-Analyze/${file.originalname}`,
         Body : file.buffer
     };
     const result = await s3.upload(param).promise();
